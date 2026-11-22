@@ -90,3 +90,52 @@
   .product-detail-image--secondary { min-height: 175px; }
   .not-found-page { padding: 70px 6%; }
 }
+
+
+/* Touch-friendly mobile catalog and product detail */
+@media (max-width: 640px) {
+  .shop-page, .product-page { padding-inline: 16px; }
+  .shop-breadcrumb { min-height: 36px; gap: 7px; font-size: 9px; }
+  .shop-heading { padding: 42px 0 28px; }
+  .shop-heading h1 { font-size: clamp(48px, 12vw, 68px); overflow-wrap: anywhere; }
+  .shop-heading > p:last-child { font-size: 12px; }
+  .catalog { padding-top: 18px; }
+  .catalog-toolbar { gap: 8px; }
+  .catalog-search { min-height: 48px; padding-inline: 3px; }
+  .catalog-search input { min-height: 44px; font-size: 16px; }
+  .catalog-sort { min-height: 44px; }
+  .catalog-sort select { min-height: 44px; font-size: 12px; }
+  .catalog-count { margin: 18px 0 12px; }
+  .product-grid { gap: 25px 10px; }
+  .product-card-image { aspect-ratio: 3 / 4; }
+  .product-tag { top: 8px; left: 8px; padding: 6px 7px; font-size: 6px; }
+  .product-card-arrow { width: 32px; height: 32px; right: 8px; bottom: 8px; opacity: 1; transform: none; }
+  .product-card-info { gap: 5px; padding-top: 10px; }
+  .product-card-info h2 { font-size: 12px; line-height: 1.35; }
+  .product-card-info p { font-size: 8px; line-height: 1.4; }
+  .product-price { gap: 6px; font-size: 11px; }
+  .stock-note { margin-top: 6px; font-size: 8px; }
+  .product-detail { padding-top: 18px; gap: 24px; }
+  .product-gallery { gap: 7px; }
+  .product-detail-image { min-height: 0; aspect-ratio: 4 / 5; }
+  .product-detail-image--secondary { min-height: 0; aspect-ratio: 1 / 1; }
+  .product-detail-placeholder { min-height: 0; aspect-ratio: 4 / 5; }
+  .product-detail-copy { padding-top: 0; }
+  .product-detail-copy h1 { font-size: clamp(38px, 10vw, 52px); }
+  .detail-price { margin-top: 14px; font-size: 16px; }
+  .detail-description { margin: 16px 0 22px; font-size: 12px; }
+  .product-options { padding-top: 17px; }
+  .option-group { margin-bottom: 19px; }
+  .color-option { width: 42px; height: 42px; }
+  .color-option span { width: 26px; height: 26px; }
+  .size-options { gap: 8px; }
+  .size-option { min-width: 48px; min-height: 44px; }
+  .variant-summary { min-height: 52px; }
+  .add-to-bag { min-height: 52px; }
+  .detail-assurance { margin: 22px 0; }
+  .detail-assurance p { align-items: flex-start; line-height: 1.5; }
+  .empty-catalog { min-height: 250px; padding-inline: 18px; }
+}
+@media (hover: none) {
+  .product-card-arrow { opacity: 1; transform: none; }
+}
