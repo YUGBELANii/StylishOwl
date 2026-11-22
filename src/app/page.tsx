@@ -87,7 +87,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="manifesto">
+      <section className="manifesto" id="story">
         <p className="eyebrow">A LITTLE LESS ORDINARY</p>
         <p className="manifesto-line">Good clothes don't need to <em>shout.</em><br />They just need to feel <em>right.</em></p>
         <Link href="#collections" className="text-link">Find your next favourite <ArrowRight size={16} /></Link>

@@ -8,10 +8,10 @@ export function SiteHeader() {
         STYLISH<span>OWL.</span>
       </Link>
       <nav className="main-nav" aria-label="Main navigation">
-        <Link href="#collections">Collections</Link>
-        <Link href="#collections">Our story</Link>
+        <Link href="/#collections">Collections</Link>
+        <Link href="/#story">Our story</Link>
       </nav>
-      <Link className="header-action" href="#collections" aria-label="Explore shopping">
+      <Link className="header-action" href="/#collections" aria-label="Explore shopping">
         <span>Shop now</span><ShoppingBag size={18} strokeWidth={1.8} />
       </Link>
     </header>
