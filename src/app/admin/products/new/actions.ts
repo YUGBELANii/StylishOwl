@@ -72,7 +72,7 @@ export async function createProductAction(_previous: ActionState, formData: Form
     size: variant.size.trim(),
     color: variant.color.trim(),
     color_code: variant.color_code || null,
-    price: variant.price === null || variant.price === undefined || variant.price === "" ? null : Number(variant.price),
+    price: variant.price === null || variant.price === undefined ? null : Number(variant.price),
     stock_quantity: Number(variant.stock_quantity),
     sku: variant.sku?.trim() || null,
     is_active: true,
