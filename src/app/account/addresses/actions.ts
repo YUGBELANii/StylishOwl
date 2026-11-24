@@ -16,9 +16,11 @@ export async function addAddressAction(formData: FormData) {
   const state = String(formData.get("state") || "").trim();
   const postal_code = String(formData.get("postal_code") || "").trim();
   if (!recipient_name || phone.length < 10 || !address_line1 || !city || !state || !/^\d{6}$/.test(postal_code)) redirect("/account/addresses?error=Check+the+address+details");
+  const isDefault = formData.get("is_default") === "on";
+  if (isDefault) await supabase.from("addresses").update({ is_default: false }).eq("user_id", user.id);
   const { error } = await supabase.from("addresses").insert({
     user_id: user.id, recipient_name, phone, address_line1, address_line2: address_line2 || null,
-    city, state, postal_code, country: "India", is_default: formData.get("is_default") === "on",
+    city, state, postal_code, country: "India", is_default: isDefault,
   });
   if (error) redirect("/account/addresses?error=Unable+to+save+address");
   revalidatePath("/account/addresses");
