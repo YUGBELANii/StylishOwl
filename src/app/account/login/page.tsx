@@ -10,7 +10,10 @@ export default async function LoginPage({ searchParams }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   const params = await searchParams;
   const signup = params.mode === "signup";
-  if (user) redirect(params.next?.startsWith("/") && !params.next.startsWith("//") ? params.next : "/account");
+  const next = params.next?.startsWith("/") && !params.next.startsWith("//") ? params.next : "/account";
+  const isAdminDestination = next === "/admin" || next.startsWith("/admin/");
+
+  if (user && (!isAdminDestination || user.app_metadata?.role === "admin")) redirect(next);
 
   return (
     <main className="account-page">
@@ -20,8 +23,9 @@ export default async function LoginPage({ searchParams }: Props) {
         <p>{signup ? "Create an account to keep track of your orders and saved delivery addresses." : "Sign in to view your orders, addresses and account details."}</p>
         {params.error && <p className="commerce-error" role="alert">{params.error}</p>}
         {params.message && <p className="account-notice">{params.message}</p>}
+        {user && isAdminDestination && user.app_metadata?.role !== "admin" && <p className="account-notice">Please sign in again to refresh your admin access.</p>}
         <form className="auth-form" action={signup ? signUpAction : signInAction}>
-          <input type="hidden" name="next" value={params.next || "/account"}/>
+          <input type="hidden" name="next" value={next}/>
           {signup && <label>Full name<input name="name" required minLength={2} autoComplete="name" /></label>}
           <label>Email address<input name="email" type="email" required autoComplete="email" /></label>
           <label>Password<input name="password" type="password" required minLength={8} autoComplete={signup ? "new-password" : "current-password"} /></label>
