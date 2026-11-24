@@ -16,7 +16,7 @@ export default async function AdminDashboard() {
     supabase.from("orders").select("grand_total,status").gte("created_at", since).limit(1000),
     supabase.from("product_variants").select("id", { count: "exact", head: true }).lte("stock_quantity", 3).eq("is_active", true),
   ]);
-  const revenue = (sales ?? []).filter((order) => !["cancelled", "refunded"].includes(order.status)).reduce((sum, order) => sum + Number(order.grand_total), 0);
+  const revenue = (sales ?? []).filter((order) => ["confirmed", "packed", "shipped", "delivered"].includes(order.status)).reduce((sum, order) => sum + Number(order.grand_total), 0);
   const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
   const links = [
     { href: "/admin/products", title: "Products", detail: "Edit, publish or hide products", icon: Store },
