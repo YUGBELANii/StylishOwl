@@ -27,7 +27,8 @@ export default async function AccountOrdersPage({ searchParams }: Props) {
             <div className="order-card-top"><div><h2>Order SO-{order.order_number}</h2><p>{new Date(order.created_at).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" })}</p></div><span className="order-status">{order.status.replaceAll("_"," ")}</span></div>
             <div className="order-items">{order.order_items.map((item) => <div className="order-item-row" key={item.id}><span>{item.product_name} · {item.size} / {item.color} × {item.quantity}</span><strong>{money.format(item.line_total)}</strong></div>)}</div>
             <div className="order-total"><span>Total</span><strong>{money.format(order.grand_total)}</strong></div>
-            <p className="order-meta">Payment: {order.payment_status === "pending" ? "To be arranged with the store" : order.payment_status}</p>\n            {order.tracking_url && <p className="order-meta">Tracking: {order.shipping_carrier || "Courier"} {order.tracking_number || ""} · <a href={order.tracking_url} target="_blank" rel="noreferrer">Track shipment ↗</a></p>}
+            <p className="order-meta">Payment: {order.payment_status === "pending" ? "To be arranged with the store" : order.payment_status}</p>
+            {order.tracking_url && <p className="order-meta">Tracking: {order.shipping_carrier || "Courier"} {order.tracking_number || ""} · <a href={order.tracking_url} target="_blank" rel="noreferrer">Track shipment ↗</a></p>}
             {order.return_requests?.map((request) => <p className="account-notice" key={request.id}>Return request: {request.status.replaceAll("_"," ")} · {request.reason.replaceAll("_"," ")}</p>)}
             {order.status === "delivered" && !order.return_requests?.length && <form action={requestReturnAction} className="return-request-form">
               <input type="hidden" name="order_id" value={order.id}/>
