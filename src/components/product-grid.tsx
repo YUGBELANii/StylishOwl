@@ -46,17 +46,62 @@ export function ProductGrid({ products, showToolbar = true, showCount = true }: 
       {showCount && <p className="catalog-count">{visibleProducts.length} {visibleProducts.length === 1 ? "piece" : "pieces"}</p>}
       {visibleProducts.length ? <div className="product-grid">
         {visibleProducts.map((product, index) => {
-          const image = [...product.images].sort((a, b) => Number(b.is_primary) - Number(a.is_primary))[0];
+          const sortedImages = [...product.images].sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
+          const image = sortedImages[0];
+          const alternateImage = sortedImages[1];
           const inStock = product.variants.some((variant) => variant.stock_quantity > 0);
-          return <Link className="product-card" href={`/product/${product.slug}`} key={product.id}>
-            <div className="product-card-image" style={image ? { backgroundImage: `url("${image.image_url}")` } : undefined}>
-              {!image && <span className="product-placeholder">SO<span> / {String(index + 1).padStart(2, "0")}</span></span>}
-              {product.is_featured && <span className="product-tag">FEATURED</span>}
-              <span className="product-card-arrow"><ArrowUpRight size={18}/></span>
-            </div>
-            <div className="product-card-info"><div><h2>{product.name}</h2><p>{product.brand_label || "StylishOwl essentials"}</p></div><div className="product-price"><strong>{money.format(product.base_price)}</strong>{product.compare_at_price && product.compare_at_price > product.base_price && <del>{money.format(product.compare_at_price)}</del>}</div></div>
-            <span className={`stock-note ${inStock ? "stock-note--available" : "stock-note--unavailable"}`}>{inStock ? "Available" : "Currently unavailable"}</span>
-          </Link>;
+          const sizes = [...new Set(product.variants.filter((variant) => variant.stock_quantity > 0 && variant.size).map((variant) => variant.size as string))];
+          const colors = [...new Set(product.variants.filter((variant) => variant.stock_quantity > 0 && variant.color).map((variant) => variant.color))].slice(0, 5);
+          const discount = product.compare_at_price && product.compare_at_price > product.base_price
+            ? Math.round((1 - product.base_price / product.compare_at_price) * 100)
+            : 0;
+
+          return (
+            <Link className="product-card product-card--refined" href={`/product/${product.slug}`} key={product.id}>
+              <div className="product-card-image product-card-image--refined">
+                {image ? (
+                  <>
+                    <span className="product-card-photo" style={{ backgroundImage: `url("${image.image_url}")` }} role="img" aria-label={image.alt_text || product.name} />
+                    {alternateImage && <span className="product-card-photo product-card-photo--alternate" style={{ backgroundImage: `url("${alternateImage.image_url}")` }} aria-hidden="true" />}
+                  </>
+                ) : <span className="product-placeholder">SO<span> / {String(index + 1).padStart(2, "0")}</span></span>}
+                <span className="product-card-badges">
+                  {discount > 0 && <span className="product-card-badge product-card-badge--sale">{discount}% OFF</span>}
+                  {product.is_featured && <span className="product-card-badge product-card-badge--featured">BEST PICK</span>}
+                </span>
+                <span className="product-card-view">View product <ArrowUpRight size={14} /></span>
+                {!inStock && <span className="product-card-soldout">SOLD OUT</span>}
+              </div>
+              <div className="product-card-details">
+                <div className="product-card-title-row">
+                  <div className="product-card-title-copy">
+                    <p className="product-card-brand">{product.brand_label || "STYLISHOWL"}</p>
+                    <h2>{product.name}</h2>
+                  </div>
+                  <div className="product-price product-price--refined">
+                    <strong>{money.format(product.base_price)}</strong>
+                    {discount > 0 && <del>{money.format(product.compare_at_price as number)}</del>}
+                  </div>
+                </div>
+                <div className="product-card-meta">
+                  <div className="product-card-options">
+                    {colors.length > 0 && (
+                      <span className="product-card-swatches" aria-label={`${colors.length} available colours`}>
+                        {colors.map((name) => {
+                          const variant = product.variants.find((item) => item.color === name);
+                          return <i key={name} title={name} style={{ backgroundColor: variant?.color_code || "#b9b1a5" }} />;
+                        })}
+                      </span>
+                    )}
+                    {sizes.length > 0 && <span className="product-card-sizes">{sizes.slice(0, 4).join(" · ")}{sizes.length > 4 ? " +" : ""}</span>}
+                  </div>
+                  <span className={`product-card-stock ${inStock ? "is-in-stock" : "is-sold-out"}`}>
+                    <i /> {inStock ? "In stock" : "Sold out"}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          );
         })}
       </div> : <div className="empty-catalog"><span className="empty-catalog-mark">SO.</span><h2>{search || availability !== "all" || priceRange !== "all" ? "No matching pieces." : "The first drop is getting ready."}</h2><p>{search || availability !== "all" || priceRange !== "all" ? "Try changing your search or filters." : "We're preparing this collection. Check back soon for the first pieces."}</p></div>}
     </div>
