@@ -1,3 +1,4 @@
+import { requireAdmin } from "../../../../lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { updateReturnStatusAction } from "./actions";
@@ -6,9 +7,7 @@ type Props = { searchParams: Promise<{ error?: string; saved?: string }> };
 const statuses = ["requested", "approved", "rejected", "received", "refunded"];
 
 export default async function AdminReturnsPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/returns");
   const [{ data: returns, error }, params] = await Promise.all([
     supabase.from("return_requests").select("id, order_id, user_id, reason, details, status, admin_note, created_at, order:orders(order_number)").order("created_at", { ascending: false }).limit(100),
     searchParams,
