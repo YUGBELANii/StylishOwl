@@ -31,7 +31,8 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                 <input type="hidden" name="order_id" value={order.id}/>
                 <label className="sr-only" htmlFor={`status-${order.id}`}>Order status</label>
                 <select id={`status-${order.id}`} name="status" defaultValue={order.status}>{statuses.map((status) => <option key={status} value={status}>{status}</option>)}</select>
-                <input name="shipping_total" type="number" min="0" step="1" defaultValue={order.shipping_total} placeholder="Delivery charge (₹)"/>\n                <input name="shipping_carrier" defaultValue={order.shipping_carrier || ""} placeholder="Carrier (optional)"/>
+                <input name="shipping_total" type="number" min="0" step="1" defaultValue={order.shipping_total} placeholder="Delivery charge (₹)"/>
+                <input name="shipping_carrier" defaultValue={order.shipping_carrier || ""} placeholder="Carrier (optional)"/>
                 <input name="tracking_number" defaultValue={order.tracking_number || ""} placeholder="Tracking number"/>
                 <input name="tracking_url" defaultValue={order.tracking_url || ""} placeholder="Tracking URL (https://...)"/>
                 <button type="submit">Save update</button>
