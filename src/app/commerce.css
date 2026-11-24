@@ -133,3 +133,19 @@
 @media(max-width:900px) { .admin-tools-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(max-width:700px) { .admin-tools-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .inventory-grid { grid-template-columns:1fr; } .inventory-adjust { grid-template-columns:1fr 1fr; } .inventory-adjust button { grid-column:1/-1; } .admin-order-bottom { align-items:flex-start; flex-direction:column; } }
 @media(max-width:480px) { .admin-tools-grid { grid-template-columns:1fr; } .admin-tool-card { min-height:125px; } }
+
+
+.header-search { display:grid; place-items:center; color:var(--muted); }
+.global-search-form { display:flex; align-items:center; gap:12px; max-width:620px; margin:28px auto 0; padding:8px 9px 8px 15px; border:1px solid var(--line); background:#fbfaf7; }
+.global-search-form input { flex:1; min-width:0; border:0; outline:0; background:transparent; padding:9px 0; font-size:12px; }
+.global-search-form button { min-height:40px; padding:0 17px; border:0; background:var(--ink); color:var(--paper); font-size:10px; font-weight:700; cursor:pointer; }
+.search-page .shop-heading { text-align:center; }
+.search-page .shop-heading > p:last-of-type { margin-left:auto; margin-right:auto; }
+.return-request-form { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; margin-top:18px; padding-top:15px; border-top:1px solid var(--line); }
+.return-request-form label { display:grid; gap:7px; color:var(--muted); font-size:9px; font-weight:700; }
+.return-request-form input,.return-request-form select,.return-admin-form input { min-height:36px; min-width:0; padding:7px 9px; border:1px solid var(--line); background:#fff; color:var(--ink); font-size:10px; }
+.return-request-form button { min-height:36px; padding:0 12px; border:0; background:var(--ink); color:var(--paper); font-size:9px; font-weight:700; cursor:pointer; }
+.return-admin-form { display:flex; flex-wrap:wrap; margin-top:16px; }
+.return-admin-form input { flex:1; min-width:180px; }
+.admin-subheading { margin:35px 0 16px; font:26px Georgia,serif; }
+@media(max-width:700px) { .return-request-form { grid-template-columns:1fr; } .return-request-form button { width:100%; } }
