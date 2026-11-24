@@ -1,7 +1,6 @@
-import { requireAdmin } from "../../../../../lib/supabase/admin";
+import { requireAdmin } from "../../../../lib/supabase/admin";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { updateProductAction } from "../actions";
 
 type Props = { params: Promise<{ id: string }> };
