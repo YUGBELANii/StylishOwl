@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <main className="store-home">
-      <nav className="home-category-nav" aria-label="Shop by category">
+      <nav id="collections" className="home-category-nav" aria-label="Shop by category">
         <span className="home-category-label">SHOP BY CATEGORY</span>
         <div className="home-category-links">
           {categories.map((category) => (
@@ -44,7 +44,7 @@ export default async function HomePage() {
         <ProductGrid products={products} showToolbar={false} showCount={false} />
       </section>
 
-      <section className="home-brand-note">
+      <section id="story" className="home-brand-note">
         <p>LESS NOISE. BETTER CHOICES. <em>MORE YOU.</em></p>
       </section>
 
