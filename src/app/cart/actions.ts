@@ -52,15 +52,16 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const rows = variants.map((variant) => {
     const product = Array.isArray(variant.product) ? variant.product[0] : variant.product;
     const quantity = quantities.get(variant.id) ?? 0;
-    const price = Number(variant.price ?? product?.base_price ?? 0);
-    return { variant, product, quantity, price };
+    const price = Math.round(Number(variant.price ?? product?.base_price ?? 0) * 100) / 100;
+    const lineTotal = Math.round(price * quantity * 100) / 100;
+    return { variant, product, quantity, price, lineTotal };
   });
 
   if (rows.some((row) => !row.product || row.quantity > Number(row.variant.stock_quantity) || row.price <= 0)) {
     return { error: "Stock has changed for one or more items. Update your bag before continuing." };
   }
 
-  const subtotal = rows.reduce((sum, row) => sum + row.price * row.quantity, 0);
+  const subtotal = Math.round(rows.reduce((sum, row) => sum + row.lineTotal, 0) * 100) / 100;
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
@@ -94,7 +95,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     color: row.variant.color,
     unit_price: row.price,
     quantity: row.quantity,
-    line_total: row.price * row.quantity,
+    line_total: row.lineTotal,
   }));
 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
@@ -107,7 +108,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     "Order: SO-" + order.order_number,
     "Name: " + name, "Phone: " + phone,
     "Delivery: " + [address, city, state, postalCode].join(", "), "",
-    ...rows.map((row) => `• ${row.product.name} — ${row.variant.size} / ${row.variant.color} × ${row.quantity} = ₹${(row.price * row.quantity).toFixed(0)}`),
+    ...rows.map((row) => `• ${row.product.name} — ${row.variant.size} / ${row.variant.color} × ${row.quantity} = ₹${row.lineTotal.toFixed(2)}`),
     "", "Subtotal: ₹" + subtotal.toFixed(0),
     "Total: ₹" + subtotal.toFixed(0),
     "Payment: To be arranged with the store (no online payment)",
