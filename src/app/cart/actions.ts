@@ -3,17 +3,10 @@
 import { createClient } from "@/lib/supabase/server";
 
 type CheckoutInput = {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  notes: string;
+  name: string; phone: string; email: string; address: string;
+  city: string; state: string; postalCode: string; notes: string;
   items: { variantId: string; quantity: number }[];
 };
-
 type CheckoutResult = { error?: string; whatsappUrl?: string; orderNumber?: string };
 
 export async function createWhatsAppOrder(input: CheckoutInput): Promise<CheckoutResult> {
@@ -45,7 +38,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const variantIds = [...quantities.keys()];
   const { data: variants, error: variantError } = await supabase
     .from("product_variants")
-    .select("id, size, color, price, stock_quantity, product:products!inner(id, name, slug, base_price)")
+    .select("id, sku, size, color, price, stock_quantity, product:products!inner(id, name, base_price)")
     .in("id", variantIds)
     .eq("is_active", true);
 
@@ -65,29 +58,22 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   }
 
   const subtotal = rows.reduce((sum, row) => sum + row.price * row.quantity, 0);
-  const orderPayload = {
-    user_id: user?.id ?? null,
-    customer_name: name,
-    phone,
-    email: input.email.trim() || user?.email || null,
-    delivery_address: {
-      line1: address,
-      city,
-      state,
-      postal_code: postalCode,
-    },
-    customer_notes: input.notes.trim() || null,
-    subtotal,
-    discount_total: 0,
-    delivery_fee: 0,
-    total: subtotal,
-    status: "whatsapp_pending",
-    channel: "whatsapp",
-  };
-
   const { data: order, error: orderError } = await supabase
     .from("orders")
-    .insert(orderPayload)
+    .insert({
+      user_id: user?.id ?? null,
+      address_snapshot: {
+        recipient_name: name, phone, email: input.email.trim() || user?.email || null,
+        address_line1: address, city, state, postal_code: postalCode, country: "India",
+      },
+      subtotal,
+      discount_total: 0,
+      shipping_total: 0,
+      grand_total: subtotal,
+      status: "pending",
+      payment_status: "pending",
+      customer_note: input.notes.trim() || null,
+    })
     .select("id, order_number")
     .single();
 
@@ -100,43 +86,38 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     product_id: row.product.id,
     variant_id: row.variant.id,
     product_name: row.product.name,
-    product_slug: row.product.slug,
+    sku: row.variant.sku,
     size: row.variant.size,
     color: row.variant.color,
-    quantity: row.quantity,
     unit_price: row.price,
+    quantity: row.quantity,
     line_total: row.price * row.quantity,
   }));
 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
   if (itemsError) {
-    await supabase.from("orders").delete().eq("id", order.id);
-    return { error: "We couldn't save your order items. Please try again." };
+    return { error: "Your order reference " + order.order_number + " was created, but its items could not be saved. Please contact the store before retrying." };
   }
 
   const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
   if (!number) {
-    return { error: "The store WhatsApp number hasn't been configured yet. Your order reference is " + order.order_number + "." };
+    return { error: "The store WhatsApp number hasn't been configured. Your order reference is " + order.order_number + "." };
   }
 
   const lines = [
-    "Hello StylishOwl! I'd like to confirm this order.",
-    "",
-    "Order: " + order.order_number,
-    "Name: " + name,
-    "Phone: " + phone,
-    "Delivery: " + [address, city, state, postalCode].join(", "),
-    "",
-    ...rows.map((row) => `• ${row.product.name} — ${row.size} / ${row.color} × ${row.quantity} = ₹${(row.price * row.quantity).toFixed(0)}`),
-    "",
-    "Subtotal: ₹" + subtotal.toFixed(0),
+    "Hello StylishOwl! I'd like to confirm this order.", "",
+    "Order: SO-" + order.order_number,
+    "Name: " + name, "Phone: " + phone,
+    "Delivery: " + [address, city, state, postalCode].join(", "), "",
+    ...rows.map((row) => `• ${row.product.name} — ${row.variant.size} / ${row.variant.color} × ${row.quantity} = ₹${(row.price * row.quantity).toFixed(0)}`),
+    "", "Subtotal: ₹" + subtotal.toFixed(0),
     "Total: ₹" + subtotal.toFixed(0),
     "Payment: To be arranged with the store (no online payment)",
     input.notes.trim() ? "Notes: " + input.notes.trim() : "",
   ].filter(Boolean);
 
   return {
-    orderNumber: order.order_number,
+    orderNumber: "SO-" + order.order_number,
     whatsappUrl: "https://wa.me/" + number + "?text=" + encodeURIComponent(lines.join("\n")),
   };
 }
