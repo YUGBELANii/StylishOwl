@@ -1,10 +1,9 @@
+import { requireAdmin } from "../../../../lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminCustomersPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/customers");
   const { data: profiles, error } = await supabase.from("profiles").select("id, full_name, phone, created_at").order("created_at", { ascending: false }).limit(200);
   return (
     <main className="admin-page">
