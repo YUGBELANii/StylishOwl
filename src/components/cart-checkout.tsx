@@ -17,6 +17,8 @@ export function CartCheckout() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const whatsappWindow = window.open("about:blank", "_blank");
+    if (whatsappWindow) whatsappWindow.opener = null;
     setError("");
     setNeedsSignIn(false);
     setPending(true);
@@ -34,13 +36,15 @@ export function CartCheckout() {
     });
     setPending(false);
     if (result.error) {
+      whatsappWindow?.close();
       setError(result.error);
       setNeedsSignIn(Boolean(result.needsSignIn));
       if (result.orderNumber) setOrderNumber(result.orderNumber);
       return;
     }
     if (result.whatsappUrl) {
-      window.open(result.whatsappUrl, "_blank", "noopener,noreferrer");
+      if (whatsappWindow) whatsappWindow.location.href = result.whatsappUrl;
+      else window.location.assign(result.whatsappUrl);
       setOrderNumber(result.orderNumber || "");
       clearCart();
     }
