@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import type { CatalogVariant } from "@/lib/catalog";
 import { useStoreCart } from "@/components/store-cart";
 
