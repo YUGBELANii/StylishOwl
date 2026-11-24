@@ -1,0 +1,33 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export async function signInAction(formData: FormData) {
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) redirect("/account/login?error=" + encodeURIComponent(error.message));
+  redirect("/account");
+}
+
+export async function signUpAction(formData: FormData) {
+  const name = String(formData.get("name") || "").trim();
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+  if (name.length < 2 || password.length < 8) redirect("/account/login?error=" + encodeURIComponent("Use your name and a password with at least 8 characters."));
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email, password, options: { data: { full_name: name } },
+  });
+  if (error) redirect("/account/login?error=" + encodeURIComponent(error.message));
+  if (!data.session) redirect("/account/login?message=" + encodeURIComponent("Check your email to confirm your account, then sign in."));
+  redirect("/account");
+}
+
+export async function signOutAction() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+}
