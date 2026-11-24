@@ -100,7 +100,8 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
   if (itemsError) {
-    return { error: "Your order reference " + order.order_number + " was created, but its items could not be saved. Please contact the store before retrying." };
+    await supabase.from("orders").delete().eq("id", order.id).eq("user_id", user.id);
+    return { error: "We could not save the order items. Please refresh your bag and try again." };
   }
 
   const lines = [
