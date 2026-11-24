@@ -1,6 +1,4 @@
-import { requireAdmin } from "../../../../lib/supabase/admin";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "../../../lib/supabase/admin";
 import { updateOrderStatusAction } from "./actions";
 
 type Props = { searchParams: Promise<{ error?: string; saved?: string; status?: string }> };
