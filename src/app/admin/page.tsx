@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent } from "lucide-react";
+import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminDashboard() {
@@ -19,7 +19,8 @@ export default async function AdminDashboard() {
     { href: "/admin/orders", title: "Orders", detail: "Review and update order status", icon: ClipboardList },
     { href: "/admin/inventory", title: "Inventory", detail: "Monitor and adjust stock", icon: Boxes },
     { href: "/admin/customers", title: "Customers", detail: "View customer profiles", icon: Users },
-    { href: "/admin/coupons", title: "Discounts", detail: "Create and manage coupons", icon: TicketPercent },\n    { href: "/admin/returns", title: "Returns", detail: "Review return requests", icon: ClipboardList },
+    { href: "/admin/coupons", title: "Discounts", detail: "Create and manage coupons", icon: TicketPercent },
+    { href: "/admin/returns", title: "Returns", detail: "Review return requests", icon: RotateCcw },
   ];
   return (
     <main className="admin-page">
