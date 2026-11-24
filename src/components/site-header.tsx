@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { Menu, Search, ShoppingBag, UserRound } from "lucide-react";
 import { useStoreCart } from "@/components/store-cart";
+import { usePathname } from "next/navigation";
 
 export function SiteHeader() {
   const { count } = useStoreCart();
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <header className="site-header">
