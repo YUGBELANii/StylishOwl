@@ -15,6 +15,13 @@ export async function signInAction(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) redirect("/account/login?error=" + encodeURIComponent(error.message));
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    await supabase.from("profiles").upsert({
+      id: user.id,
+      full_name: String(user.user_metadata?.full_name || ""),
+    }, { onConflict: "id", ignoreDuplicates: true });
+  }
   redirect(next);
 }
 
@@ -28,6 +35,9 @@ export async function signUpAction(formData: FormData) {
   const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: name } } });
   if (error) redirect("/account/login?mode=signup&error=" + encodeURIComponent(error.message));
   if (!data.session) redirect("/account/login?mode=signup&message=" + encodeURIComponent("Check your email to confirm your account, then sign in."));
+  if (data.user) {
+    await supabase.from("profiles").upsert({ id: data.user.id, full_name: name }, { onConflict: "id", ignoreDuplicates: true });
+  }
   redirect(next);
 }
 
