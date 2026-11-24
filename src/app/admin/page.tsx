@@ -19,7 +19,7 @@ export default async function AdminDashboard() {
     { href: "/admin/orders", title: "Orders", detail: "Review and update order status", icon: ClipboardList },
     { href: "/admin/inventory", title: "Inventory", detail: "Monitor and adjust stock", icon: Boxes },
     { href: "/admin/customers", title: "Customers", detail: "View customer profiles", icon: Users },
-    { href: "/admin/coupons", title: "Discounts", detail: "Create and manage coupons", icon: TicketPercent },
+    { href: "/admin/coupons", title: "Discounts", detail: "Create and manage coupons", icon: TicketPercent },\n    { href: "/admin/returns", title: "Returns", detail: "Review return requests", icon: ClipboardList },
   ];
   return (
     <main className="admin-page">
