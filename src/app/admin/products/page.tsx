@@ -1,4 +1,4 @@
-import { requireAdmin } from "../../../lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { toggleProductAction } from "./actions";
