@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signInAction, signUpAction } from "@/app/account/actions";
 
-type Props = { searchParams: Promise<{ error?: string; message?: string; mode?: string }> };
+type Props = { searchParams: Promise<{ error?: string; message?: string; mode?: string; next?: string }> };
 
 export default async function LoginPage({ searchParams }: Props) {
   const supabase = await createClient();
@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <p>{signup ? "Create an account to keep track of your orders and saved delivery addresses." : "Sign in to view your orders, addresses and account details."}</p>
         {params.error && <p className="commerce-error" role="alert">{params.error}</p>}
         {params.message && <p className="account-notice">{params.message}</p>}
-        <form className="auth-form" action={signup ? signUpAction : signInAction}>
+        <form className="auth-form" action={signup ? signUpAction : signInAction}>\n          <input type="hidden" name="next" value={params.next || "/account"}/>
           {signup && <label>Full name<input name="name" required minLength={2} autoComplete="name" /></label>}
           <label>Email address<input name="email" type="email" required autoComplete="email" /></label>
           <label>Password<input name="password" type="password" required minLength={8} autoComplete={signup ? "new-password" : "current-password"} /></label>
