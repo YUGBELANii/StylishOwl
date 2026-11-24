@@ -36,6 +36,8 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Sign in before placing an order so you can track it later.", needsSignIn: true };
+  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+  if (!number) return { error: "The store WhatsApp number has not been configured yet. Please contact the store." };
   const variantIds = [...quantities.keys()];
   const { data: variants, error: variantError } = await supabase
     .from("product_variants")
@@ -98,11 +100,6 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
   if (itemsError) {
     return { error: "Your order reference " + order.order_number + " was created, but its items could not be saved. Please contact the store before retrying." };
-  }
-
-  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
-  if (!number) {
-    return { error: "The store WhatsApp number hasn't been configured. Your order reference is " + order.order_number + "." };
   }
 
   const lines = [
