@@ -106,6 +106,62 @@ export async function getProductsByCategory(categoryId: string): Promise<Catalog
   }));
 }
 
+
+export async function getActiveCategories(): Promise<CatalogCategory[]> {
+  if (!hasSupabaseConfig()) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("categories")
+    .select("id, name, slug, description, image_url")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+  if (error) {
+    console.error("Unable to load categories:", error.message);
+    return [];
+  }
+  return (data ?? []) as CatalogCategory[];
+}
+
+export async function getFeaturedProducts(limit = 8): Promise<CatalogProduct[]> {
+  if (!hasSupabaseConfig()) return [];
+  const supabase = await createClient();
+  const { data: products, error } = await supabase
+    .from("products")
+    .select("id, name, slug, description, brand_label, base_price, compare_at_price, is_featured")
+    .eq("is_active", true)
+    .order("is_featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error || !products?.length) {
+    if (error) console.error("Unable to load featured products:", error.message);
+    return [];
+  }
+
+  const ids = products.map((product) => product.id);
+  const [{ data: images }, { data: variants }] = await Promise.all([
+    supabase.from("product_images")
+      .select("id, product_id, image_url, alt_text, is_primary, sort_order")
+      .in("product_id", ids)
+      .order("sort_order", { ascending: true }),
+    supabase.from("product_variants")
+      .select("id, product_id, size, color, color_code, price, stock_quantity")
+      .in("product_id", ids)
+      .eq("is_active", true),
+  ]);
+
+  return products.map((product) => ({
+    ...product,
+    base_price: Number(product.base_price),
+    compare_at_price: product.compare_at_price === null ? null : Number(product.compare_at_price),
+    images: ((images ?? []) as (CatalogImage & { product_id: string })[])
+      .filter((image) => image.product_id === product.id),
+    variants: ((variants ?? []) as (CatalogVariant & { product_id: string })[])
+      .filter((variant) => variant.product_id === product.id)
+      .map((variant) => ({ ...variant, price: variant.price === null ? null : Number(variant.price) })),
+  }));
+}
+
 export async function getProductBySlug(slug: string): Promise<(CatalogProduct & { category: CatalogCategory }) | null> {
   if (!hasSupabaseConfig()) return null;
 

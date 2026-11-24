@@ -1,59 +1,51 @@
 import Link from "next/link";
-import { ArrowDownRight, ArrowRight, MoveUpRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { ProductGrid } from "@/components/product-grid";
+import { getActiveCategories, getFeaturedProducts } from "@/lib/catalog";
 
-const categories = [
-  { number: "01", name: "Baggy Jeans", detail: "Room to move. Made to stand out.", href: "/shop/baggy-jeans", style: "category-card--denim", mark: "DENIM" },
-  { number: "02", name: "T-shirts", detail: "The everyday, done differently.", href: "/shop/t-shirts", style: "category-card--tee", mark: "ESSENTIALS" },
-  { number: "03", name: "Shirts", detail: "A sharper take on laid-back.", href: "/shop/shirts", style: "category-card--shirt", mark: "DAILY FORM" },
-];
+export default async function HomePage() {
+  const [categories, products] = await Promise.all([
+    getActiveCategories(),
+    getFeaturedProducts(8),
+  ]);
 
-export default function HomePage() {
   return (
-    <main>
-      <section className="hero">
-        <div className="hero-grain" aria-hidden="true" />
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="eyebrow-dot" /> THE NEW EVERYDAY</p>
-          <h1>Wear your<br /><span>own kind</span> of style.</h1>
-          <p className="hero-description">Considered essentials. Effortless combinations. Pieces that feel like you.</p>
-          <Link className="button button--light" href="#collections">Discover the collection <ArrowRight size={16} /></Link>
-        </div>
-        <div className="hero-side-note"><span>STYLE IS PERSONAL</span><span>EST. 2026</span></div>
-        <div className="hero-index"><span>01</span> / 03</div>
-        <div className="hero-shape hero-shape--one" aria-hidden="true" />
-        <div className="hero-shape hero-shape--two" aria-hidden="true" />
-        <div className="hero-sticker" aria-hidden="true">OWN<br />YOUR<br />LOOK <ArrowDownRight size={20} /></div>
-      </section>
-
-      <section className="ticker" aria-label="Brand message">
-        <div className="ticker-track">
-          {Array.from({ length: 4 }).map((_, index) => <span key={index}>MADE FOR EVERYDAY <i>✳</i> FIND YOUR FIT <i>✳</i> KEEP IT PERSONAL <i>✳</i></span>)}
-        </div>
-      </section>
-
-      <section className="collections section-wrap" id="collections">
-        <div className="section-heading">
-          <div><p className="eyebrow eyebrow--dark">EXPLORE THE EDIT / 001</p><h2>Find your<br /><span>everyday.</span></h2></div>
-          <p className="section-intro">A considered edit of everyday pieces, ready to make your own.</p>
-        </div>
-        <div className="category-grid">
+    <main className="store-home">
+      <nav id="collections" className="home-category-nav" aria-label="Shop by category">
+        <span className="home-category-label">SHOP BY CATEGORY</span>
+        <div className="home-category-links">
           {categories.map((category) => (
-            <Link className={`category-card ${category.style}`} href={category.href} key={category.number}>
-              <span className="category-number">{category.number}</span>
-              <span className="category-mark">{category.mark}</span>
-              <span className="category-bottom">
-                <span><strong>{category.name}</strong><small>{category.detail}</small></span>
-                <span className="category-arrow"><MoveUpRight size={18} /></span>
-              </span>
-            </Link>
+            <Link href={`/shop/${category.slug}`} key={category.id}>{category.name}<ArrowRight size={13} /></Link>
           ))}
+          {categories.length === 0 && <span className="home-category-empty">New collections coming soon</span>}
         </div>
+      </nav>
+
+      <section className="home-promo" aria-label="Store promotion">
+        <div className="home-promo-copy">
+          <span className="home-promo-kicker"><Sparkles size={13} /> THE EVERYDAY EDIT</span>
+          <h1>Good style. <em>No effort.</em></h1>
+          <p>Explore easy-to-wear pieces made for your everyday rotation.</p>
+        </div>
+        <Link href={categories[0] ? `/shop/${categories[0].slug}` : "/search"} className="home-promo-link">
+          Shop the collection <ArrowRight size={16} />
+        </Link>
+        <span className="home-promo-index">STYLISHOWL / 001</span>
       </section>
 
-      <section className="manifesto" id="story">
-        <p className="eyebrow">THE STYLISHOWL POINT OF VIEW</p>
-        <p className="manifesto-line">Less noise. Better choices.<br /><em>More you.</em></p>
-        <Link href="#collections" className="text-link">Explore the collections <ArrowRight size={15} /></Link>
+      <section className="home-products" aria-labelledby="home-products-title">
+        <div className="home-products-heading">
+          <div>
+            <p className="eyebrow eyebrow--dark">CURATED FOR YOU</p>
+            <h2 id="home-products-title">Shop the <em>latest.</em></h2>
+          </div>
+          <Link href={categories[0] ? `/shop/${categories[0].slug}` : "/search"}>Explore all <ArrowRight size={15} /></Link>
+        </div>
+        <ProductGrid products={products} showToolbar={false} showCount={false} />
+      </section>
+
+      <section id="story" className="home-brand-note">
+        <p>LESS NOISE. BETTER CHOICES. <em>MORE YOU.</em></p>
       </section>
 
       <footer className="site-footer">
