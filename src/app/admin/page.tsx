@@ -1,8 +1,6 @@
-import { requireAdmin } from "../../../lib/supabase/admin";
+import { requireAdmin } from "../../lib/supabase/admin";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw, FolderOpen, Store } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminDashboard() {
   const { supabase } = await requireAdmin("/admin");
