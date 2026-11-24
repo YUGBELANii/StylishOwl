@@ -9,13 +9,13 @@ export async function signInAction(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) redirect("/account/login?error=" + encodeURIComponent(error.message));
-  redirect("/account");
+  redirect(next);
 }
 
 export async function signUpAction(formData: FormData) {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
+  const password = String(formData.get("password") || "");\n  const requestedNext = String(formData.get("next") || "/account");\n  const next = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/account";
   if (name.length < 2 || password.length < 8) redirect("/account/login?error=" + encodeURIComponent("Use your name and a password with at least 8 characters."));
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -23,7 +23,7 @@ export async function signUpAction(formData: FormData) {
   });
   if (error) redirect("/account/login?error=" + encodeURIComponent(error.message));
   if (!data.session) redirect("/account/login?message=" + encodeURIComponent("Check your email to confirm your account, then sign in."));
-  redirect("/account");
+  redirect(next);
 }
 
 export async function signOutAction() {
