@@ -1,4 +1,4 @@
-import { requireAdmin } from "../../../lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/admin";
 
 export default async function AdminCustomersPage() {
   const { supabase } = await requireAdmin("/admin/customers");
