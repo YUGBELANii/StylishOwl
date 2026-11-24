@@ -1,3 +1,4 @@
+import { requireAdmin } from "../../../../lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrderStatusAction } from "./actions";
@@ -7,9 +8,7 @@ const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR
 const statuses = ["pending", "confirmed", "packed", "shipped", "delivered", "cancelled", "refunded"];
 
 export default async function AdminOrdersPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/orders");
   const params = await searchParams;
   let query = supabase.from("orders").select("id, order_number, user_id, address_snapshot, subtotal, discount_total, shipping_total, grand_total, status, payment_status, customer_note, shipping_carrier, tracking_number, tracking_url, created_at, order_items(id, product_name, sku, size, color, quantity, unit_price, line_total)").order("created_at", { ascending: false }).limit(100);
   if (params.status && statuses.includes(params.status)) query = query.eq("status", params.status);
