@@ -1,3 +1,4 @@
+import { requireAdmin } from "../../../../lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { adjustInventoryAction } from "./actions";
@@ -5,9 +6,7 @@ import { adjustInventoryAction } from "./actions";
 type Props = { searchParams: Promise<{ error?: string; saved?: string }> };
 
 export default async function AdminInventoryPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/inventory");
   const [{ data: variants, error }, params] = await Promise.all([
     supabase.from("product_variants").select("id, sku, size, color, stock_quantity, product:products!inner(name)").eq("is_active", true).order("stock_quantity"),
     searchParams,
