@@ -1,4 +1,4 @@
-import { requireAdmin } from "../../lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw, FolderOpen, Store } from "lucide-react";
 
