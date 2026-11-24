@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, ShoppingBag, UserRound } from "lucide-react";
+import { Menu, Search, ShoppingBag, UserRound } from "lucide-react";
 import { useStoreCart } from "@/components/store-cart";
 
 export function SiteHeader() {
@@ -14,7 +14,7 @@ export function SiteHeader() {
         <Link href="/#collections">Collections</Link>
         <Link href="/#story">Our story</Link>
       </nav>
-      <div className="header-right">
+      <div className="header-right">\n        <Link className="header-search" href="/search" aria-label="Search products"><Search size={17}/></Link>
         <Link className="header-account" href="/account"><UserRound size={17} /><span>Account</span></Link>
         <Link className="header-action" href="/cart" aria-label={`Shopping bag, ${count} items`}>
           <span>Bag{count > 0 ? ` (${count})` : ""}</span><ShoppingBag size={18} strokeWidth={1.8} />
