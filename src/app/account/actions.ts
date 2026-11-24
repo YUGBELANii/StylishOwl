@@ -32,7 +32,7 @@ export async function signUpAction(formData: FormData) {
   const next = safeNext(formData.get("next"));
   if (name.length < 2 || password.length < 8) redirect("/account/login?mode=signup&error=" + encodeURIComponent("Use your name and a password with at least 8 characters."));
   const supabase = await createClient();
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\\/$/, "");
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
   const { data, error } = await supabase.auth.signUp({
     email, password,
     options: {
