@@ -51,7 +51,7 @@ export function ProductGrid({ products, showToolbar = true, showCount = true }: 
           const alternateImage = sortedImages[1];
           const inStock = product.variants.some((variant) => variant.stock_quantity > 0);
           const sizes = [...new Set(product.variants.filter((variant) => variant.stock_quantity > 0 && variant.size).map((variant) => variant.size as string))];
-          const colors = [...new Map(product.variants.filter((variant) => variant.stock_quantity > 0 && variant.color).map((variant) => [variant.color, variant.color_code || "#b9b1a5"])).entries()].slice(0, 5);
+          const colors = [...new Set(product.variants.filter((variant) => variant.stock_quantity > 0 && variant.color).map((variant) => variant.color))].slice(0, 5);
           const discount = product.compare_at_price && product.compare_at_price > product.base_price
             ? Math.round((1 - product.base_price / product.compare_at_price) * 100)
             : 0;
@@ -87,7 +87,10 @@ export function ProductGrid({ products, showToolbar = true, showCount = true }: 
                   <div className="product-card-options">
                     {colors.length > 0 && (
                       <span className="product-card-swatches" aria-label={`${colors.length} available colours`}>
-                        {colors.map(([name, code]) => <i key={name} title={name} style={{ backgroundColor: code }} />)}
+                        {colors.map((name) => {
+                          const variant = product.variants.find((item) => item.color === name);
+                          return <i key={name} title={name} style={{ backgroundColor: variant?.color_code || "#b9b1a5" }} />;
+                        })}
                       </span>
                     )}
                     {sizes.length > 0 && <span className="product-card-sizes">{sizes.slice(0, 4).join(" · ")}{sizes.length > 4 ? " +" : ""}</span>}
