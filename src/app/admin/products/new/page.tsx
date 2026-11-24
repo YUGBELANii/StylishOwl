@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, PackagePlus } from "lucide-react";
-import { requireAdmin } from "../../../lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/admin";
 import { ProductForm } from "./product-form";
 
 type Props = { searchParams: Promise<{ created?: string }> };
