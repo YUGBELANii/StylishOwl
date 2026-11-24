@@ -7,7 +7,7 @@ type CheckoutInput = {
   city: string; state: string; postalCode: string; notes: string;
   items: { variantId: string; quantity: number }[];
 };
-type CheckoutResult = { error?: string; whatsappUrl?: string; orderNumber?: string };
+type CheckoutResult = { error?: string; needsSignIn?: boolean; whatsappUrl?: string; orderNumber?: string };
 
 export async function createWhatsAppOrder(input: CheckoutInput): Promise<CheckoutResult> {
   const name = input.name.trim();
@@ -61,7 +61,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
-      user_id: user?.id ?? null,
+      user_id: user.id,
       address_snapshot: {
         recipient_name: name, phone, email: input.email.trim() || user?.email || null,
         address_line1: address, city, state, postal_code: postalCode, country: "India",
