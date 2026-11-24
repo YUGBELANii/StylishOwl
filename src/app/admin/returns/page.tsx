@@ -1,4 +1,4 @@
-import { requireAdmin } from "../../../lib/supabase/admin";
+import { requireAdmin } from "@/lib/supabase/admin";
 import { updateReturnStatusAction } from "./actions";
 
 type Props = { searchParams: Promise<{ error?: string; saved?: string }> };
