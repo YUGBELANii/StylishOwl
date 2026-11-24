@@ -1,8 +1,6 @@
-import { requireAdmin } from "../../../../lib/supabase/admin";
+import { requireAdmin } from "../../../lib/supabase/admin";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ArrowUpRight, Plus } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 import { toggleProductAction } from "./actions";
 
 export default async function AdminProductsPage() {
