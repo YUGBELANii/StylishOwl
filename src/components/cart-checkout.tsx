@@ -12,11 +12,13 @@ export function CartCheckout() {
   const { items, subtotal, updateQuantity, removeItem, clearCart } = useStoreCart();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
-  const [orderNumber, setOrderNumber] = useState("");\n  const [needsSignIn, setNeedsSignIn] = useState(false);
+  const [orderNumber, setOrderNumber] = useState("");
+  const [needsSignIn, setNeedsSignIn] = useState(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setNeedsSignIn(false);
     setPending(true);
     const form = new FormData(event.currentTarget);
     const result = await createWhatsAppOrder({
@@ -33,6 +35,7 @@ export function CartCheckout() {
     setPending(false);
     if (result.error) {
       setError(result.error);
+      setNeedsSignIn(Boolean(result.needsSignIn));
       if (result.orderNumber) setOrderNumber(result.orderNumber);
       return;
     }
@@ -73,7 +76,6 @@ export function CartCheckout() {
         ))}
         <Link className="cart-continue" href="/#collections">← Continue shopping</Link>
       </section>
-
       <section className="cart-checkout-panel">
         <div className="commerce-section-heading"><span>DELIVERY DETAILS</span><small>Checkout via WhatsApp</small></div>
         <form className="checkout-form" onSubmit={submit}>
@@ -93,7 +95,7 @@ export function CartCheckout() {
             <div className="checkout-grand-total"><span>Order total</span><strong>{money.format(subtotal)}*</strong></div>
             <p>*Final delivery charges and order availability will be confirmed by the store on WhatsApp.</p>
           </div>
-          {error && <p className="commerce-error" role="alert">{error}{needsSignIn && <> <Link href="/account/login?next=/cart">Sign in here ↗</Link></>}</p>}
+          {error && <div className="commerce-error" role="alert">{error}{needsSignIn && <p><Link href="/account/login?next=/cart">Sign in to continue ↗</Link></p>}</div>}
           <button className="commerce-submit" type="submit" disabled={pending}>{pending ? "Preparing your order..." : "Continue to WhatsApp"} <ArrowRight size={17} /></button>
           <p className="checkout-disclaimer">No online payment is collected. Your order request is saved and sent to the store for confirmation.</p>
         </form>
