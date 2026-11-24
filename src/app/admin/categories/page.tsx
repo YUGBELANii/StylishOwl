@@ -1,13 +1,10 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/admin";
 import { createCategoryAction } from "./actions";
 
 type Props = { searchParams: Promise<{ error?: string; saved?: string }> };
 
 export default async function AdminCategoriesPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/categories");
   const [{ data: categories, error }, params] = await Promise.all([
     supabase.from("categories").select("id,name,slug,description,is_active,sort_order").order("sort_order"),
     searchParams,

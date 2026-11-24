@@ -1,18 +1,12 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ArrowLeft, PackagePlus } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/admin";
 import { ProductForm } from "./product-form";
 
 type Props = { searchParams: Promise<{ created?: string }> };
 
 export default async function NewProductPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) redirect("/");
-
-  if (user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/products/new");
 
   const [{ data: categories, error }, params] = await Promise.all([
     supabase.from("categories").select("id, name").eq("is_active", true).order("sort_order"),

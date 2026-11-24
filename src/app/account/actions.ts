@@ -16,6 +16,10 @@ export async function signInAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) redirect("/account/login?next=" + encodeURIComponent(next) + "&error=" + encodeURIComponent(error.message));
   const { data: { user } } = await supabase.auth.getUser();
+  const isAdminDestination = next === "/admin" || next.startsWith("/admin/");
+  if (isAdminDestination && user?.app_metadata?.role !== "admin") {
+    redirect("/account/login?next=" + encodeURIComponent(next) + "&error=" + encodeURIComponent("This account does not have admin access. Sign in with the authorized admin account."));
+  }
   if (user) {
     await supabase.from("profiles").upsert({
       id: user.id,

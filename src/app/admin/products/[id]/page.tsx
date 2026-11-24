@@ -1,15 +1,13 @@
+import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { updateProductAction } from "../actions";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function EditProductPage({ params }: Props) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/products/[id]");
   const { data: product } = await supabase.from("products").select("id,name,description,base_price,compare_at_price,is_featured,slug").eq("id", id).maybeSingle();
   if (!product) notFound();
   return (

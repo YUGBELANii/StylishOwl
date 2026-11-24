@@ -1,14 +1,11 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/supabase/admin";
 import { createCouponAction } from "./actions";
 
 type Props = { searchParams: Promise<{ error?: string; saved?: string }> };
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
 export default async function AdminCouponsPage({ searchParams }: Props) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/coupons");
   const [{ data: coupons, error }, params] = await Promise.all([
     supabase.from("coupons").select("*").order("created_at", { ascending: false }),
     searchParams,

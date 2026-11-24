@@ -1,13 +1,10 @@
+import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ArrowUpRight, Plus } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 import { toggleProductAction } from "./actions";
 
 export default async function AdminProductsPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin/products");
   const { data: products, error } = await supabase.from("products")
     .select("id, name, slug, base_price, is_active, is_featured, created_at, category:categories(name), product_variants(stock_quantity)")
     .order("created_at", { ascending: false });

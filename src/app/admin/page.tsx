@@ -1,12 +1,9 @@
+import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw, FolderOpen, Store } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminDashboard() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.app_metadata?.role !== "admin") redirect("/");
+  const { supabase } = await requireAdmin("/admin");
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ count: products }, { count: orders }, { count: customers }, { data: recent }, { data: sales }, { count: lowStock }] = await Promise.all([
     supabase.from("products").select("id", { count: "exact", head: true }),
