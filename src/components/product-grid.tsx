@@ -5,10 +5,10 @@ import Link from "next/link";
 import { ArrowUpRight, Search, SlidersHorizontal } from "lucide-react";
 import type { CatalogProduct } from "@/lib/catalog";
 
-type Props = { products: CatalogProduct[] };
+type Props = { products: CatalogProduct[]; showToolbar?: boolean; showCount?: boolean };
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
-export function ProductGrid({ products }: Props) {
+export function ProductGrid({ products, showToolbar = true, showCount = true }: Props) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("featured");
   const [availability, setAvailability] = useState("all");
@@ -35,15 +35,15 @@ export function ProductGrid({ products }: Props) {
 
   return (
     <div className="catalog">
-      <div className="catalog-toolbar">
+      {showToolbar && <div className="catalog-toolbar">
         <label className="catalog-search"><Search size={17}/><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search products" aria-label="Search products"/></label>
         <div className="catalog-filters">
           <label className="catalog-sort"><SlidersHorizontal size={16}/><span className="sr-only">Availability</span><select value={availability} onChange={(event) => setAvailability(event.target.value)}><option value="all">All availability</option><option value="in-stock">In stock only</option></select></label>
           <label className="catalog-sort"><span className="sr-only">Price range</span><select value={priceRange} onChange={(event) => setPriceRange(event.target.value)}><option value="all">All prices</option><option value="under-1000">Under ₹1,000</option><option value="1000-2000">₹1,000–₹2,000</option><option value="over-2000">Over ₹2,000</option></select></label>
           <label className="catalog-sort"><span className="sr-only">Sort products</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="featured">Featured first</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A to Z</option></select></label>
         </div>
-      </div>
-      <p className="catalog-count">{visibleProducts.length} {visibleProducts.length === 1 ? "piece" : "pieces"}</p>
+      </div>}
+      {showCount && <p className="catalog-count">{visibleProducts.length} {visibleProducts.length === 1 ? "piece" : "pieces"}</p>}
       {visibleProducts.length ? <div className="product-grid">
         {visibleProducts.map((product, index) => {
           const image = [...product.images].sort((a, b) => Number(b.is_primary) - Number(a.is_primary))[0];
