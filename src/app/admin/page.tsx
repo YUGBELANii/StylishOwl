@@ -1,6 +1,6 @@
 import { requireAdmin } from "@/lib/supabase/admin";
 import Link from "next/link";
-import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw, FolderOpen, Store } from "lucide-react";
+import { ArrowUpRight, ClipboardList, PackagePlus, Boxes, Users, TicketPercent, RotateCcw, FolderOpen, Store, Settings2 } from "lucide-react";
 
 export default async function AdminDashboard() {
   const { supabase } = await requireAdmin("/admin");
@@ -21,6 +21,7 @@ export default async function AdminDashboard() {
     { href: "/admin/categories", title: "Collections", detail: "Organize product categories", icon: FolderOpen },
     { href: "/admin/orders", title: "Orders", detail: "Review and update order status", icon: ClipboardList },
     { href: "/admin/inventory", title: "Inventory", detail: "Monitor and adjust stock", icon: Boxes },
+    { href: "/admin/settings", title: "Store settings", detail: "Change the WhatsApp checkout number", icon: Settings2 },
     { href: "/admin/customers", title: "Customers", detail: "View customer profiles", icon: Users },
     { href: "/admin/coupons", title: "Discounts", detail: "Create promotional codes", icon: TicketPercent },
     { href: "/admin/returns", title: "Returns", detail: "Review return requests", icon: RotateCcw },

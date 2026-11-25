@@ -36,8 +36,15 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Sign in before placing an order so you can track it later.", needsSignIn: true };
-  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+
+  const { data: storeSettings } = await supabase
+    .from("store_settings")
+    .select("whatsapp_number")
+    .eq("id", "primary")
+    .maybeSingle();
+  const number = (storeSettings?.whatsapp_number || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
   if (!number) return { error: "The store WhatsApp number has not been configured yet. Please contact the store." };
+
   const variantIds = [...quantities.keys()];
   const { data: variants, error: variantError } = await supabase
     .from("product_variants")

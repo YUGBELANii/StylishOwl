@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Boxes, ChevronRight, FolderKanban, LayoutDashboard, Package, Settings2, ShoppingBag, TicketPercent, Users, Wallet } from "lucide-react";
-const primary=[{href:"/admin",label:"Overview",icon:LayoutDashboard,exact:true},{href:"/admin/orders",label:"Orders",icon:ShoppingBag},{href:"/admin/products",label:"Products",icon:Package},{href:"/admin/categories",label:"Collections",icon:FolderKanban},{href:"/admin/inventory",label:"Inventory",icon:Boxes}];
+const primary=[{href:"/admin",label:"Overview",icon:LayoutDashboard,exact:true},{href:"/admin/orders",label:"Orders",icon:ShoppingBag},{href:"/admin/products",label:"Products",icon:Package},{href:"/admin/categories",label:"Collections",icon:FolderKanban},{href:"/admin/inventory",label:"Inventory",icon:Boxes},{href:"/admin/settings",label:"Store settings",icon:Settings2}];
 const growth=[{href:"/admin/customers",label:"Customers",icon:Users},{href:"/admin/coupons",label:"Discounts",icon:TicketPercent},{href:"/admin/returns",label:"Returns",icon:Wallet}];
 function NavLink({item,pathname}:{item:(typeof primary)[number]|(typeof growth)[number];pathname:string}){
  const active="exact" in item&&item.exact?pathname===item.href:pathname===item.href||pathname.startsWith(item.href+"/");
