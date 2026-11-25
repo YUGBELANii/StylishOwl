@@ -6,7 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function adjustInventoryAction(formData: FormData) {
   const supabase = await createClient();
-  const { data: { claims }, error: claimsError } = await supabase.auth.getClaims();
+  const { data, error: claimsError } = await supabase.auth.getClaims();
+  const claims = data?.claims;
   const appMetadata = claims?.app_metadata as { role?: string } | undefined;
   if (claimsError || !claims?.sub || appMetadata?.role !== "admin") {
     redirect("/account/login?next=%2Fadmin%2Finventory");
