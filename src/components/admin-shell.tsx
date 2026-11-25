@@ -13,7 +13,7 @@ export function AdminShell({children}:{children:React.ReactNode}){
  const pathname=usePathname();
  return <div className="admin-shell">
   <aside className="admin-sidebar">
-   <Link href="/admin" className="admin-brand"><span className="admin-brand-mark">S</span><span>STYLISH<span>OWL.</span><small>STORE MANAGEMENT</small></span></Link>
+   <Link href="/admin" className="admin-brand"><span className="admin-brand-mark">O</span><span>OWLZ<span>LABEL.</span><small>STORE MANAGEMENT</small></span></Link>
    <div className="admin-nav-caption">WORKSPACE</div><nav className="admin-nav" aria-label="Admin navigation">{primary.map(item=><NavLink key={item.href} item={item} pathname={pathname}/>)}</nav>
    <div className="admin-nav-caption admin-nav-caption--spaced">CUSTOMER & GROWTH</div><nav className="admin-nav" aria-label="Customer and growth navigation">{growth.map(item=><NavLink key={item.href} item={item} pathname={pathname}/>)}</nav>
    <div className="admin-sidebar-bottom"><Link href="/" className="admin-nav-link"><ArrowUpRight size={17}/><span>View storefront</span></Link><div className="admin-user"><span className="admin-avatar">A</span><span><strong>Store admin</strong><small>Administrator</small></span><Settings2 size={16}/></div></div>

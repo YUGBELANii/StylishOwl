@@ -6,8 +6,8 @@ import { SiteHeader } from "@/components/site-header";
 import { StoreCartProvider } from "@/components/store-cart";
 
 export const metadata: Metadata = {
-  title: "StylishOwl — Everyday, redefined",
-  description: "A fresh clothing storefront for everyday essentials.",
+  title: "Owlz Label — Wear Your Identity",
+  description: "Contemporary everyday fashion, thoughtfully selected for your wardrobe.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

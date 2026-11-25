@@ -15,7 +15,7 @@ export default async function AddressesPage({ searchParams }: Props) {
   ]);
   return (
     <main className="account-page">
-      <header className="account-heading"><p className="eyebrow eyebrow--dark">STYLISHOWL / ACCOUNT</p><h1>Delivery addresses<span>.</span></h1><p>Save addresses for a quicker WhatsApp checkout.</p></header>
+      <header className="account-heading"><p className="eyebrow eyebrow--dark">OWLZ LABEL / ACCOUNT</p><h1>Delivery addresses<span>.</span></h1><p>Save addresses for a quicker WhatsApp checkout.</p></header>
       {params.error && <p className="commerce-error">{params.error}</p>}
       {params.saved && <p className="account-notice">Address saved successfully.</p>}
       <div className="address-list">{addresses?.map((address) => <article className="order-card" key={address.id}>

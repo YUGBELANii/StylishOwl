@@ -55,7 +55,7 @@ export function CartCheckout() {
   }
 
   if (!items.length && orderNumber) {
-    return <div className="commerce-success"><span>ORDER REQUEST CREATED</span><h1>One last step<span>.</span></h1><p>Your reference is <strong>{orderNumber}</strong>. WhatsApp should have opened with your order details. Send that message to confirm the request with StylishOwl.</p><Link href="/#collections" className="commerce-primary-link">Continue shopping <ArrowRight size={16} /></Link></div>;
+    return <div className="commerce-success"><span>ORDER REQUEST CREATED</span><h1>One last step<span>.</span></h1><p>Your reference is <strong>{orderNumber}</strong>. WhatsApp should have opened with your order details. Send that message to confirm the request with Owlz Label.</p><Link href="/#collections" className="commerce-primary-link">Continue shopping <ArrowRight size={16} /></Link></div>;
   }
 
   return (
