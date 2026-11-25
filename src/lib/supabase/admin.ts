@@ -6,7 +6,8 @@ export async function requireAdmin(nextPath: string) {
 
   // Verify the signed access token locally through Supabase's JWKS flow.
   // Unlike getUser(), getClaims() avoids an Auth API round trip on every admin navigation.
-  const { data: { claims }, error } = await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
   const appMetadata = claims?.app_metadata as { role?: string } | undefined;
 
   if (error || !claims?.sub || appMetadata?.role !== "admin") {
