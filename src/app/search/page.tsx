@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { searchCatalog } from "@/lib/catalog";
 
-export const metadata: Metadata = { title: "Search — StylishOwl", description: "Search the StylishOwl clothing collection." };
+export const metadata: Metadata = { title: "Search — Owlz Label", description: "Search the Owlz Label clothing collection." };
 type Props = { searchParams: Promise<{ q?: string }> };
 
 export default async function SearchPage({ searchParams }: Props) {
@@ -12,7 +12,7 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <main className="shop-page search-page">
       <section className="shop-heading">
-        <p className="eyebrow eyebrow--dark">STYLISHOWL / DISCOVER</p>
+        <p className="eyebrow eyebrow--dark">OWLZ LABEL / DISCOVER</p>
         <h1>Find your fit<span>.</span></h1>
         <p>Search across the full collection.</p>
         <form className="global-search-form" action="/search" method="get">

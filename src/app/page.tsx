@@ -13,7 +13,7 @@ export default async function HomePage() {
     <main className="store-home">
       <section className="home-intro" aria-labelledby="home-title">
         <div className="home-intro-copy">
-          <p className="eyebrow"><span className="eyebrow-dot" /> THE STYLISHOWL COLLECTION</p>
+          <p className="eyebrow"><span className="eyebrow-dot" /> THE OWLZ LABEL COLLECTION</p>
           <h1 id="home-title">Find your <em>everyday</em> style.</h1>
           <p>Easy-to-wear pieces, thoughtfully picked for your wardrobe.</p>
         </div>
@@ -68,9 +68,9 @@ export default async function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <Link className="wordmark wordmark--footer" href="/">STYLISH<span>OWL.</span></Link>
+        <Link className="wordmark wordmark--footer" href="/">OWLZ<span>LABEL.</span></Link>
         <span>Thoughtful pieces for your everyday rotation.</span>
-        <span>© 2026 StylishOwl</span>
+        <span>© 2026 Owlz Label</span>
       </footer>
     </main>
   );

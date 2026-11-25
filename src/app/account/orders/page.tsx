@@ -18,7 +18,7 @@ export default async function AccountOrdersPage({ searchParams }: Props) {
 
   return (
     <main className="account-page">
-      <header className="account-heading"><p className="eyebrow eyebrow--dark">STYLISHOWL / ACCOUNT</p><h1>Your orders<span>.</span></h1><p>Order updates and delivery progress will appear here.</p></header>
+      <header className="account-heading"><p className="eyebrow eyebrow--dark">OWLZ LABEL / ACCOUNT</p><h1>Your orders<span>.</span></h1><p>Order updates and delivery progress will appear here.</p></header>
       {params.error && <p className="commerce-error">{params.error}</p>}
       {params.returnRequested && <p className="account-notice">Your return request has been submitted.</p>}
       {error ? <div className="commerce-error">We couldn't load your orders. Please refresh the page.</div> :

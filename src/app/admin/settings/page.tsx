@@ -15,7 +15,7 @@ export default async function AdminSettingsPage({ searchParams }: Props) {
     <main className="admin-page">
       <header className="admin-page-heading">
         <div>
-          <p className="eyebrow eyebrow--dark">STYLISHOWL / ADMIN</p>
+          <p className="eyebrow eyebrow--dark">OWLZ LABEL / ADMIN</p>
           <h1>Store settings.</h1>
           <p>Manage the contact details customers use when placing an order.</p>
         </div>

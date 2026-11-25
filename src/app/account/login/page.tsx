@@ -18,7 +18,7 @@ export default async function LoginPage({ searchParams }: Props) {
   return (
     <main className="account-page">
       <div className="auth-card">
-        <p className="eyebrow eyebrow--dark">STYLISHOWL / YOUR ACCOUNT</p>
+        <p className="eyebrow eyebrow--dark">OWLZ LABEL / YOUR ACCOUNT</p>
         <h1>{signup ? "Create account." : "Welcome back."}</h1>
         <p>{signup ? "Create an account to keep track of your orders and saved delivery addresses." : "Sign in to view your orders, addresses and account details."}</p>
         {params.error && <p className="commerce-error" role="alert">{params.error}</p>}
@@ -32,7 +32,7 @@ export default async function LoginPage({ searchParams }: Props) {
           <button type="submit">{signup ? "Create account" : "Sign in"} ↗</button>
         </form>
         <div className="auth-switch">
-          {signup ? <>Already have an account? <Link href="/account/login">Sign in</Link></> : <>New to StylishOwl? <Link href={`/account/login?mode=signup${params.next ? "&next=" + encodeURIComponent(params.next) : ""}`}>Create an account</Link></>}
+          {signup ? <>Already have an account? <Link href="/account/login">Sign in</Link></> : <>New to Owlz Label? <Link href={`/account/login?mode=signup${params.next ? "&next=" + encodeURIComponent(params.next) : ""}`}>Create an account</Link></>}
         </div>
         <p><Link href="/" className="cart-continue">← Back to the store</Link></p>
       </div>

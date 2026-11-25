@@ -14,7 +14,7 @@ export default async function ProfilePage({ searchParams }: Props) {
   ]);
   return (
     <main className="account-page">
-      <header className="account-heading"><p className="eyebrow eyebrow--dark">STYLISHOWL / ACCOUNT</p><h1>Profile settings<span>.</span></h1><p>Keep your contact details up to date.</p></header>
+      <header className="account-heading"><p className="eyebrow eyebrow--dark">OWLZ LABEL / ACCOUNT</p><h1>Profile settings<span>.</span></h1><p>Keep your contact details up to date.</p></header>
       {params.error && <p className="commerce-error">{params.error}</p>}{params.saved && <p className="account-notice">Profile updated.</p>}
       <section className="auth-card"><form className="auth-form" action={updateProfileAction}>
         <label>Full name<input name="full_name" required minLength={2} defaultValue={profile?.full_name || String(user.user_metadata?.full_name || "")}/></label>

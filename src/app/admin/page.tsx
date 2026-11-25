@@ -28,7 +28,7 @@ export default async function AdminDashboard() {
   ];
   return (
     <main className="admin-page">
-      <header className="admin-page-heading"><div><p className="eyebrow eyebrow--dark">STYLISHOWL / ADMIN</p><h1>Store overview.</h1><p>Your store operations, in one place.</p></div><Link className="text-link" href="/">View storefront <ArrowUpRight size={16}/></Link></header>
+      <header className="admin-page-heading"><div><p className="eyebrow eyebrow--dark">OWLZ LABEL / ADMIN</p><h1>Store overview.</h1><p>Your store operations, in one place.</p></div><Link className="text-link" href="/">View storefront <ArrowUpRight size={16}/></Link></header>
       <section className="admin-dashboard-grid">
         <div className="admin-dashboard-card"><span>PRODUCTS</span><strong>{products ?? 0}</strong></div>
         <div className="admin-dashboard-card"><span>ALL ORDERS</span><strong>{orders ?? 0}</strong></div>
